@@ -1,0 +1,76 @@
+version: '3.7'
+
+services:
+  node-server-instance-1:
+    build:
+      context: ./node
+      dockerfile: ./Dockerfile
+    image: node-server-instance
+    command: java -jar ./target/node.jar 5000
+    expose:
+      - 5000
+    env_file:
+      - ./node/.env
+  
+  node-server-instance-2:
+    image: node-server-instance
+    command: java -jar ./target/node.jar 5000
+    expose:
+      - 5000
+    env_file:
+      - ./node/.env
+  
+  node-server-instance-3:
+    image: node-server-instance
+    command: java -jar ./target/node.jar 5000
+    expose:
+      - 5000
+    env_file:
+      - ./node/.env
+  
+  node-server-instance-4:
+    image: node-server-instance
+    command: java -jar ./target/node.jar 5000
+    expose:
+      - 5000
+    env_file:
+      - ./node/.env
+  
+  node-server-instance-5:
+    image: node-server-instance
+    command: java -jar ./target/node.jar 5000
+    expose:
+      - 5000
+    env_file:
+      - ./node/.env
+
+  redis-server:
+    ports:
+      - "6379:6379"
+    build:
+      context: ./redis
+      dockerfile: ./Dockerfile
+    image: redis
+  
+  orchestrator:
+    build:
+      context: ./orchestrator
+      dockerfile: ./Dockerfile
+    command: java -jar ./target/orchestrator.jar 8080
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./orchestrator/.env
+    depends_on:
+      - redis-server
+      - node-server-instance-1
+      - node-server-instance-2
+      - node-server-instance-3
+      - node-server-instance-4
+      - node-server-instance-5
+
+
+
+networks:
+  default:
+    name: file-network
